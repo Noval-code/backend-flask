@@ -41,23 +41,6 @@ def clean_text(text):
 
 analysis_bp = Blueprint('analysis', __name__)
 
-@analysis_bp.route('/api/wordcloud', methods=['GET'])
-def generate_wordcloud():
-    articles = list(mongo.db.big_data.find())
-    all_text = ' '.join([a['title'] for a in articles if 'title' in a])
-    words = clean_text(all_text)
-
-    # Gunakan hanya kata-kata dari vocabulary
-    filtered_words = [word for word in words if word in ballet_vocabulary]
-    text_for_cloud = ' '.join(filtered_words)
-
-    wordcloud = WordCloud(width=800, height=400, background_color='white').generate(text_for_cloud)
-
-    os.makedirs("static", exist_ok=True)
-    path = os.path.join("static", "wordcloud.png")
-    wordcloud.to_file(path)
-    return send_file(path, mimetype='image/png')
-
 
 @analysis_bp.route('/api/topwords', methods=['GET'])
 def top_words():

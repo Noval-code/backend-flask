@@ -3,7 +3,6 @@ flask-cors
 flask-mail
 flask-jwt-extended
 flask-pymongo
-wordcloud
 requests
 firebase-admin
 pymongo
