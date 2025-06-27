@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, send_file, request
-from typing_extensions import mongo
+from extensions import mongo
 from collections import Counter
 from wordcloud import WordCloud
 import os

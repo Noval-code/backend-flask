@@ -1,5 +1,5 @@
 from flask import current_app
-from typing_extensions import mongo
+from extensions import mongo
 
 def get_all_articles():
     articles_cursor = mongo.db.articles.find()

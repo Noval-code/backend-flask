@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, current_app
-from typing_extensions import mongo
+from extensions import mongo
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson.objectid import ObjectId
 from routes.decorators import require_api_key

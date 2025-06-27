@@ -1,6 +1,6 @@
 import os
 import requests
-from typing_extensions import mongo
+from extensions import mongo
 from flask import Blueprint, jsonify, request, current_app, url_for
 from bson.objectid import ObjectId
 from flask_jwt_extended import create_access_token,jwt_required, get_jwt, get_jwt_identity
