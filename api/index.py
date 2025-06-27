@@ -48,3 +48,7 @@ def root():
 @require_api_key
 def secure_data():
     return jsonify({"message": "API Key is valid, access granted!"})
+
+# WSGI handler untuk Vercel
+def handler(environ, start_response):
+    return app.wsgi_app(environ, start_response)
