@@ -1,4 +1,4 @@
-from extensions import mongo  # kalau extensions.py satu folder
+from .extensions import mongo  # kalau extensions.py satu folder
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from config import DevelopmentConfig
