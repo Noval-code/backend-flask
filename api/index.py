@@ -24,14 +24,6 @@ logging.basicConfig(level=logging.DEBUG)
 # Inisialisasi app Flask
 app = Flask(__name__)
 
-# Hanya import dan load dotenv jika di local (bukan production)
-if os.environ.get("FLASK_ENV") != "production":
-    try:
-        import dotenv
-        dotenv.load_dotenv()
-    except ImportError:
-        print("dotenv not available in production (safe to ignore)")
-
 # Set API Key statis jika digunakan
 app.config['STATIC_API_KEY'] = '1234567890abcdef'
 
