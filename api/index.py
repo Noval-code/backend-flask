@@ -5,11 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
-from dotenv import load_dotenv
 import logging
-
-# Load .env untuk lokal (tidak berefek di Vercel, aman untuk dikosongkan di production)
-load_dotenv()
 
 # Import konfigurasi dan ekstensi
 from config import DevelopmentConfig, ProductionConfig
@@ -28,10 +24,16 @@ logging.basicConfig(level=logging.DEBUG)
 # Inisialisasi app Flask
 app = Flask(__name__)
 
-# Hanya load .env jika bukan di production (misalnya saat lokal development)
+import os
+
+# Hanya import dan load dotenv jika di local (bukan production)
 if os.environ.get("FLASK_ENV") != "production":
-    from dotenv import load_dotenv
-    load_dotenv()
+    try:
+        import dotenv
+        dotenv.load_dotenv()
+    except ImportError:
+        print("dotenv not available in production (safe to ignore)")
+
 # Set API Key statis jika digunakan
 app.config['STATIC_API_KEY'] = '1234567890abcdef'
 

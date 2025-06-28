@@ -13,6 +13,7 @@
     }
   ],
   "env": {
+    "FLASK_ENV": "production",
     "SECRET_KEY": "@SECRET_KEY",
     "MONGO_URI": "@MONGO_URI",
     "JWT_SECRET_KEY": "@JWT_SECRET_KEY",
