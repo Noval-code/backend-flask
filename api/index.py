@@ -24,8 +24,6 @@ logging.basicConfig(level=logging.DEBUG)
 # Inisialisasi app Flask
 app = Flask(__name__)
 
-import os
-
 # Hanya import dan load dotenv jika di local (bukan production)
 if os.environ.get("FLASK_ENV") != "production":
     try:
