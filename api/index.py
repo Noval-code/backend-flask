@@ -5,7 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
-import logging
+
 
 # Import konfigurasi dan ekstensi
 from config import DevelopmentConfig, ProductionConfig
@@ -17,9 +17,6 @@ from routes.auth_routes import auth_bp
 from routes.article_routes import article_bp
 from routes.progress_routes import progress_bp
 from routes.analysis_routes import analysis_bp
-
-# Logging
-logging.basicConfig(level=logging.DEBUG)
 
 # Inisialisasi app Flask
 app = Flask(__name__)
