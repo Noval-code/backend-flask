@@ -70,3 +70,8 @@ def secure_data():
 # Handler untuk Vercel (penting!)
 def handler(environ, start_response):
     return app.wsgi_app(environ, start_response)
+
+print("=== DEBUG ENV ===")
+print("SECRET_KEY:", os.environ.get("SECRET_KEY"))
+print("MONGO_URI:", os.environ.get("MONGO_URI"))
+print("=================")
