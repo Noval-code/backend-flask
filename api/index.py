@@ -1,13 +1,22 @@
-from .extensions import mongo  # kalau extensions.py satu folder
+# api/index.py
+
+import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from .config import DevelopmentConfig
 from flask_mail import Mail
 from flask_jwt_extended import JWTManager
-from routes.decorators import require_api_key
+from dotenv import load_dotenv
 import logging
 
-# Blueprints
+# Load .env untuk lokal (tidak berefek di Vercel, aman untuk dikosongkan di production)
+load_dotenv()
+
+# Import konfigurasi dan ekstensi
+from config import DevelopmentConfig, ProductionConfig
+from extensions import mongo
+from routes.decorators import require_api_key
+
+# Import Blueprints
 from routes.auth_routes import auth_bp
 from routes.article_routes import article_bp
 from routes.progress_routes import progress_bp
@@ -16,39 +25,48 @@ from routes.analysis_routes import analysis_bp
 # Logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Inisialisasi App
+# Inisialisasi app Flask
 app = Flask(__name__)
-app.config.from_object(DevelopmentConfig)
-app.config['STATIC_API_KEY'] = '1234567890abcdef'
-CORS(app)
 
-# Inisialisasi Mongo, JWT, Mail
+# Pilih config sesuai environment
+ENV = os.environ.get("FLASK_ENV", "development")
+if ENV == "production":
+    app.config.from_object(ProductionConfig)
+else:
+    app.config.from_object(DevelopmentConfig)
+
+# Set API Key statis jika digunakan
+app.config['STATIC_API_KEY'] = '1234567890abcdef'
+
+# Setup ekstensi
+CORS(app)
 mongo.init_app(app)
 jwt = JWTManager(app)
 mail = Mail(app)
 revoked_tokens = set()
 
+# Token blacklist handler
 @jwt.token_in_blocklist_loader
 def check_if_token_is_revoked(jwt_header, jwt_payload):
     jti = jwt_payload["jti"]
     return jti in revoked_tokens
 
-# Register Blueprints
-app.register_blueprint(analysis_bp)
-app.register_blueprint(article_bp)
+# Register blueprints
 app.register_blueprint(auth_bp)
-app.register_blueprint(progress_bp, url_prefix='/api')
+app.register_blueprint(article_bp)
+app.register_blueprint(analysis_bp)
+app.register_blueprint(progress_bp, url_prefix="/api")
 
-# Routes
-@app.route('/', methods=['GET'])
+# Routes dasar
+@app.route("/", methods=["GET"])
 def root():
     return jsonify({"message": "Welcome to the API"}), 200
 
-@app.route('/secure-data', methods=['GET'])
+@app.route("/secure-data", methods=["GET"])
 @require_api_key
 def secure_data():
     return jsonify({"message": "API Key is valid, access granted!"})
 
-# WSGI handler untuk Vercel
+# Handler untuk Vercel (penting!)
 def handler(environ, start_response):
     return app.wsgi_app(environ, start_response)
