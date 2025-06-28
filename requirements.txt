@@ -6,4 +6,4 @@ flask-pymongo
 requests
 firebase-admin
 pymongo
-werkzeug
+python-dotenv

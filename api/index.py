@@ -28,13 +28,10 @@ logging.basicConfig(level=logging.DEBUG)
 # Inisialisasi app Flask
 app = Flask(__name__)
 
-# Pilih config sesuai environment
-ENV = os.environ.get("FLASK_ENV", "development")
-if ENV == "production":
-    app.config.from_object(ProductionConfig)
-else:
-    app.config.from_object(DevelopmentConfig)
-
+# Hanya load .env jika bukan di production (misalnya saat lokal development)
+if os.environ.get("FLASK_ENV") != "production":
+    from dotenv import load_dotenv
+    load_dotenv()
 # Set API Key statis jika digunakan
 app.config['STATIC_API_KEY'] = '1234567890abcdef'
 
